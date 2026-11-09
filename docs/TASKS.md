@@ -15,7 +15,8 @@ Pick ONE unchecked item per 60–90 min session.
 - [ ] Data model: product, BOM, machine, material, order
 - [ ] Load config/factory.yaml
 - [ ] SimPy machine process with job queue
-- [ ] Production route saw → sander → assembly → paint
+- [ ] SMT route: paste print → pick & place → reflow → AOI → functional test (+ rework loop)
+- [ ] AOI defects depend on reflow oven drift; rework or scrap
 - [ ] Inventory consumption
 - [ ] Random failures (MTBF, fixed seed)
 - [ ] Simulated suppliers
@@ -50,7 +51,7 @@ Pick ONE unchecked item per 60–90 min session.
 - [ ] Maintenance agent
 - [ ] Supervisor
 - [ ] Human approval (LangGraph interrupt) + dashboard button
-- [ ] Scenarios: machine breakdown, supplier down, huge rush order
+- [ ] Scenarios: chip shortage, oven drift → yield drop, huge rush order
 - [ ] LLM call counter + rate limiter
 - [ ] C++: CMake + pybind11 skeleton callable from Python
 - [ ] C++: port data structures (jobs, machines, routes)

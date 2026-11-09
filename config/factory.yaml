@@ -1,60 +1,121 @@
-# FactoryOS — factory definition (starting values, tune freely)
-# Times are in simulated minutes. Costs are in simulated ILS.
+# FactoryOS — PCB assembly factory (SMT line)
+# Starting values, tune freely. Times in simulated minutes, money in simulated ILS.
 
 simulation:
   seed: 42
   shift_minutes: 480        # one 8-hour shift = one simulated day
 
+# --- Line stations -----------------------------------------------------------
+# Every product passes the same line, so stations are shared and contended.
 machines:
-  - id: saw-1
-    type: saw
-    mtbf_minutes: 2400      # mean time between failures
-    repair_minutes: 90
-  - id: sander-1
-    type: sander
-    mtbf_minutes: 3000
-    repair_minutes: 60
-  - id: assembly-1
-    type: assembly
+  - id: printer-1           # solder paste stencil printer
+    type: paste_printer
     mtbf_minutes: 4000
-    repair_minutes: 45
-  - id: paint-1
-    type: paint
-    mtbf_minutes: 2000
+    repair_minutes: 60
+  - id: pnp-1               # pick & place — the line bottleneck
+    type: pick_and_place
+    mtbf_minutes: 2400
     repair_minutes: 120
+  - id: pnp-2
+    type: pick_and_place
+    mtbf_minutes: 2400
+    repair_minutes: 120
+  - id: reflow-1            # reflow oven; temperature drift raises defect rate
+    type: reflow_oven
+    mtbf_minutes: 6000
+    repair_minutes: 180
+    drift:
+      nominal_temp_c: 245
+      drift_per_hour_c: 0.15          # slow drift until calibrated
+      defect_rate_per_degree: 0.01    # +1% AOI defects per degree off nominal
+      calibration_minutes: 45
+  - id: aoi-1               # automated optical inspection
+    type: aoi
+    mtbf_minutes: 8000
+    repair_minutes: 60
+  - id: test-1              # functional / electrical test
+    type: functional_test
+    mtbf_minutes: 5000
+    repair_minutes: 90
+  - id: rework-1            # manual rework station for failed boards
+    type: rework
+    mtbf_minutes: 10000
+    repair_minutes: 30
 
+quality:
+  base_defect_rate: 0.02     # chance a board fails AOI with a healthy oven
+  rework_minutes: 15
+  rework_success_rate: 0.9   # otherwise the board is scrapped
+
+# --- Materials ---------------------------------------------------------------
 materials:
-  - { id: wood_board, unit: board, reorder_point: 40, stock: 120 }
-  - { id: screws,     unit: pack,  reorder_point: 20, stock: 60 }
-  - { id: paint,      unit: liter, reorder_point: 10, stock: 30 }
+  - { id: pcb_devboard, unit: board,  reorder_point: 50,    stock: 200 }
+  - { id: pcb_sensor,   unit: board,  reorder_point: 50,    stock: 200 }
+  - { id: pcb_psu,      unit: board,  reorder_point: 50,    stock: 200 }
+  - { id: mcu,          unit: chip,   reorder_point: 100,   stock: 300 }
+  - { id: sensor_ic,    unit: chip,   reorder_point: 80,    stock: 200 }
+  - { id: power_ic,     unit: chip,   reorder_point: 100,   stock: 300 }
+  - { id: passives,     unit: piece,  reorder_point: 20000, stock: 60000 }
+  - { id: connector,    unit: piece,  reorder_point: 300,   stock: 1000 }
+  - { id: solder_paste, unit: gram,   reorder_point: 500,   stock: 2000 }
 
+# --- Products ----------------------------------------------------------------
 products:
-  desk:
-    bom: { wood_board: 6, screws: 2, paint: 1 }
+  dev_board:
+    bom: { pcb_devboard: 1, mcu: 1, passives: 120, connector: 3, solder_paste: 4 }
     route:
-      - { machine: saw,      minutes: 25 }
-      - { machine: sander,   minutes: 20 }
-      - { machine: assembly, minutes: 30 }
-      - { machine: paint,    minutes: 35 }
-  chair:
-    bom: { wood_board: 3, screws: 1, paint: 0.5 }
+      - { machine: paste_printer,   minutes: 2 }
+      - { machine: pick_and_place,  minutes: 8 }
+      - { machine: reflow_oven,     minutes: 6 }
+      - { machine: aoi,             minutes: 2 }
+      - { machine: functional_test, minutes: 4 }
+  sensor_module:
+    bom: { pcb_sensor: 1, mcu: 1, sensor_ic: 1, passives: 40, connector: 1, solder_paste: 2 }
     route:
-      - { machine: saw,      minutes: 15 }
-      - { machine: sander,   minutes: 15 }
-      - { machine: assembly, minutes: 20 }
-      - { machine: paint,    minutes: 20 }
-  shelf:
-    bom: { wood_board: 4, screws: 1, paint: 0.5 }
+      - { machine: paste_printer,   minutes: 2 }
+      - { machine: pick_and_place,  minutes: 4 }
+      - { machine: reflow_oven,     minutes: 6 }
+      - { machine: aoi,             minutes: 1 }
+      - { machine: functional_test, minutes: 3 }
+  power_supply:
+    bom: { pcb_psu: 1, power_ic: 2, passives: 60, connector: 2, solder_paste: 5 }
     route:
-      - { machine: saw,      minutes: 20 }
-      - { machine: assembly, minutes: 15 }
-      - { machine: paint,    minutes: 25 }
+      - { machine: paste_printer,   minutes: 2 }
+      - { machine: pick_and_place,  minutes: 5 }
+      - { machine: reflow_oven,     minutes: 6 }
+      - { machine: aoi,             minutes: 2 }
+      - { machine: functional_test, minutes: 6 }
 
+# --- Suppliers ---------------------------------------------------------------
 suppliers:
-  - { id: timber-co,  supplies: [wood_board],    lead_time_minutes: 960,  price: { wood_board: 45 } }
-  - { id: fast-wood,  supplies: [wood_board],    lead_time_minutes: 240,  price: { wood_board: 70 } }
-  - { id: hardware-il, supplies: [screws, paint], lead_time_minutes: 480, price: { screws: 25, paint: 60 } }
+  - id: chipdist            # authorized distributor: cheap, slow, can cut allocation
+    supplies: [mcu, sensor_ic, power_ic]
+    lead_time_minutes: 4800
+    price: { mcu: 18, sensor_ic: 12, power_ic: 9 }
+    allocation_risk: true   # used by the "chip shortage" scenario
+  - id: chipbroker          # broker: ~3x price, fast
+    supplies: [mcu, sensor_ic, power_ic]
+    lead_time_minutes: 960
+    price: { mcu: 55, sensor_ic: 36, power_ic: 27 }
+  - id: passives-il
+    supplies: [passives, connector]
+    lead_time_minutes: 1440
+    price: { passives: 0.02, connector: 1.5 }
+  - id: pcbfab
+    supplies: [pcb_devboard, pcb_sensor, pcb_psu]
+    lead_time_minutes: 2880
+    price: { pcb_devboard: 8, pcb_sensor: 4, pcb_psu: 6 }
+  - id: solderco
+    supplies: [solder_paste]
+    lead_time_minutes: 960
+    price: { solder_paste: 0.4 }
+
+# --- Crisis scenarios (Phase 5) ----------------------------------------------
+scenarios:
+  chip_shortage:     { supplier: chipdist, allocation_cut: 0.7, starts_day: 3 }
+  oven_drift:        { machine: reflow-1, drift_multiplier: 5, starts_day: 2 }
+  rush_order:        { product: dev_board, quantity: 400, due_days: 3, starts_day: 4 }
 
 agents:
-  human_approval_threshold: 5000   # purchases above this wait for the manager
+  human_approval_threshold: 20000   # purchases above this wait for the manager
   max_llm_calls_per_event: 5

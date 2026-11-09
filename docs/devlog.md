@@ -5,4 +5,5 @@ End every session with three lines: what I did, where I stopped, the next step.
 ## 2026-11-09
 - Did: project plan written, folder skeleton created.
 - Stopped at: Phase 0, nothing installed yet.
+- Decided: PCB assembly factory (ADR 0003); C++ scheduling engine (ADR 0002).
 - Next: create the public GitHub repo and push this folder.

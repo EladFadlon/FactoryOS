@@ -1,6 +1,6 @@
 # FactoryOS
 
-An agentic manufacturing simulation: a simulated wooden-furniture factory (desk, chair, shelf) run by a team of AI agents — orders, production planning, maintenance, procurement and a supervisor — with a live dashboard for the factory manager.
+An agentic manufacturing simulation: a simulated PCB assembly factory — one SMT line (paste printer, 2× pick & place, reflow oven, AOI, functional test, rework) producing a dev board, a sensor module and a power supply — run by a team of AI agents (orders, production planning, maintenance, procurement, supervisor) with a live dashboard for the factory manager.
 
 > Status: Phase 0 — setup. See `docs/devlog.md` for the latest progress.
 
