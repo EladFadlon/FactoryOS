@@ -1,0 +1,60 @@
+# FactoryOS — factory definition (starting values, tune freely)
+# Times are in simulated minutes. Costs are in simulated ILS.
+
+simulation:
+  seed: 42
+  shift_minutes: 480        # one 8-hour shift = one simulated day
+
+machines:
+  - id: saw-1
+    type: saw
+    mtbf_minutes: 2400      # mean time between failures
+    repair_minutes: 90
+  - id: sander-1
+    type: sander
+    mtbf_minutes: 3000
+    repair_minutes: 60
+  - id: assembly-1
+    type: assembly
+    mtbf_minutes: 4000
+    repair_minutes: 45
+  - id: paint-1
+    type: paint
+    mtbf_minutes: 2000
+    repair_minutes: 120
+
+materials:
+  - { id: wood_board, unit: board, reorder_point: 40, stock: 120 }
+  - { id: screws,     unit: pack,  reorder_point: 20, stock: 60 }
+  - { id: paint,      unit: liter, reorder_point: 10, stock: 30 }
+
+products:
+  desk:
+    bom: { wood_board: 6, screws: 2, paint: 1 }
+    route:
+      - { machine: saw,      minutes: 25 }
+      - { machine: sander,   minutes: 20 }
+      - { machine: assembly, minutes: 30 }
+      - { machine: paint,    minutes: 35 }
+  chair:
+    bom: { wood_board: 3, screws: 1, paint: 0.5 }
+    route:
+      - { machine: saw,      minutes: 15 }
+      - { machine: sander,   minutes: 15 }
+      - { machine: assembly, minutes: 20 }
+      - { machine: paint,    minutes: 20 }
+  shelf:
+    bom: { wood_board: 4, screws: 1, paint: 0.5 }
+    route:
+      - { machine: saw,      minutes: 20 }
+      - { machine: assembly, minutes: 15 }
+      - { machine: paint,    minutes: 25 }
+
+suppliers:
+  - { id: timber-co,  supplies: [wood_board],    lead_time_minutes: 960,  price: { wood_board: 45 } }
+  - { id: fast-wood,  supplies: [wood_board],    lead_time_minutes: 240,  price: { wood_board: 70 } }
+  - { id: hardware-il, supplies: [screws, paint], lead_time_minutes: 480, price: { screws: 25, paint: 60 } }
+
+agents:
+  human_approval_threshold: 5000   # purchases above this wait for the manager
+  max_llm_calls_per_event: 5
