@@ -11,6 +11,7 @@ Code computes, agents decide. The simulation, scheduling algorithms and database
 ```
 simulation/  SimPy digital twin: machines, queues, failures, suppliers, event bus
 backend/     FastAPI + PostgreSQL: REST API, WebSocket event stream
+scheduler_cpp/ C++17 scheduling engine, exposed to Python via pybind11
 agents/      LangGraph agents: orders, planning, maintenance, procurement, supervisor
 mcp_server/  MCP server exposing factory actions as tools
 frontend/    React + Vite + TypeScript dashboard for the factory manager
@@ -25,4 +26,4 @@ docker compose up         # db + backend + frontend
 ```
 
 ## Stack
-Python 3.12 · SimPy · FastAPI · SQLAlchemy · PostgreSQL · LangGraph · MCP · Gemini (free tier) / OpenRouter / Ollama · React · Recharts · Langfuse · Docker · GitHub Actions
+Python 3.12 · C++17 · pybind11 · CMake · GoogleTest · SimPy · FastAPI · SQLAlchemy · PostgreSQL · LangGraph · MCP · Gemini (free tier) / OpenRouter / Ollama · React · Recharts · Langfuse · Docker · GitHub Actions

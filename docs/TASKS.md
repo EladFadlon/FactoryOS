@@ -52,6 +52,12 @@ Pick ONE unchecked item per 60–90 min session.
 - [ ] Human approval (LangGraph interrupt) + dashboard button
 - [ ] Scenarios: machine breakdown, supplier down, huge rush order
 - [ ] LLM call counter + rate limiter
+- [ ] C++: CMake + pybind11 skeleton callable from Python
+- [ ] C++: port data structures (jobs, machines, routes)
+- [ ] C++: implement scheduler + GoogleTest tests
+- [ ] Parity test: same input → same schedule in Python and C++
+- [ ] Benchmark 100 / 1,000 / 10,000 jobs, chart in README
+- [ ] Build the C++ module in CI
 
 ## Phase 6 — Polish & present (May 31 – Jun 20)
 - [ ] Langfuse self-hosted
