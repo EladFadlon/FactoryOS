@@ -4,9 +4,9 @@ Pick ONE unchecked item per 60–90 min session.
 
 ## Phase 0 — Setup (Nov 9–22, 2026)
 - [x] Project folder skeleton
-- [ ] Public GitHub repo + first push
-- [ ] Install Docker, Python 3.12, Node 22, uv
-- [ ] SimPy tutorial (2h)
+- [x] Public GitHub repo + first push
+- [x] Install Docker, Python 3.12, Node 22, uv
+- [x] SimPy tutorial (2h)
 - [ ] LangGraph quickstart (3h)
 - [ ] Gemini key (AI Studio) + OpenRouter key
 - [ ] Apply for GitHub Student Pack (BGU email)

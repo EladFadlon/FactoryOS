@@ -17,3 +17,8 @@ End every session with three lines: what I did, where I stopped, the next step.
 - Did: uv + Python 3.12, Node 26 LTS, Docker Desktop verified; docker compose up brings up Postgres. Phase 0 exit criterion met.
 - Stopped at: Phase 0 – remaining: SimPy tutorial, LangGraph quickstart, API keys, Student Pack.
 - Next: session 3 – SimPy tutorial, ending with one machine processing a job queue.
+
+## 11-11-2026
+- Did: SimPy basics; 01_one_machine + 02_two_stations (P&P → oven), written myself.
+- Learned: oven queue always 0, P&P is the bottleneck; read env.now, don't compute times by hand.
+- Next: lead time per board in 02_two_stations.
