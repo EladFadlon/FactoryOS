@@ -25,7 +25,7 @@ End every session with three lines: what I did, where I stopped, the next step.
 
 ## 15-11-2026
 - Did: oven avg wait + lead time per board in 02_two_stations (51 done, avg 33.8, max 60.5).
-- Compared: 1 P&P → avg lead 33.8 min, P&P 87%; 2 P&P → 23.6 min, P&P 48%, oven 68% (bottleneck moved to oven).
+- Compared: 1 P&P → avg lead 33.8 min, P&P 87%; 2 P&P → 23.6 min, P&P 48%, oven 68%, oven wait 0 → 7.3 min (bottleneck  moved to oven).
 - Learned: boards unfinished at shift end aren't counted (censoring).
 - Next: LangGraph quickstart.
 
