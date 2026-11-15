@@ -1,6 +1,6 @@
 """Session 3: one pick & place machine processing a queue of boards.
 
-Run:  uv run --with simpy python simulation/playground/01_one_machine.py
+Run:  uv run --with simpy python simulation/playground/02_two_stations.py
 """
 import random
 
@@ -17,11 +17,12 @@ waits = []
 busy_minutes = 0.0
 oven_waits = []
 oven_busy = 0
+lead_times = []
 
 
 def board(env, name, pnp ,oven):
     """One board: wait in line for the machine, get processed, leave."""
-    global busy_minutes, oven_busy
+    global busy_minutes, oven_busy, lead_times
     arrived = env.now
     with pnp.request() as req:           # join the queue
         yield req                        # wait until the machine is free
@@ -39,6 +40,8 @@ def board(env, name, pnp ,oven):
         yield env.timeout(OVEN_MINUTES)
         oven_busy += OVEN_MINUTES
     print(f"{env.now:6.1f}  {name} done")
+    lead_time = env.now - arrived
+    lead_times.append(lead_time)
 
 def arrivals(env, pnp, oven):
     """Generate boards at random intervals until the shift ends."""
@@ -47,6 +50,19 @@ def arrivals(env, pnp, oven):
         yield env.timeout(random.expovariate(1 / MEAN_ARRIVAL_MINUTES))
         i += 1
         env.process(board(env, f"board-{i:03d}", pnp , oven))
+
+def avg_leadT(lead_times ):
+    sum = 0.0
+    for x in lead_times:
+        sum += x
+    return sum / len(lead_times)
+
+def max_leadT(lead_times):
+    max = 0.0
+    for x in lead_times: 
+        if max < x:
+            max = x
+    return max
 
 
 def main():
@@ -64,5 +80,10 @@ def main():
     print(f"still in queue:     {len(pnp.queue)}")
     print(f"machine utilization {busy_minutes / (SHIFT_MINUTES * MACHINES):.0%}")
     print(f"oven utilization {(oven_busy / SHIFT_MINUTES):.0%}")
+    print(f"Board Count: {len(lead_times)}")
+    print(f"avg lead time: {avg_leadT(lead_times):.1f}")
+    print(f"max lead time: {max_leadT(lead_times):.1f}")
+
+
 if __name__ == "__main__":
     main()

@@ -22,3 +22,7 @@ End every session with three lines: what I did, where I stopped, the next step.
 - Did: SimPy basics; 01_one_machine + 02_two_stations (P&P → oven), written myself.
 - Learned: oven queue always 0, P&P is the bottleneck; read env.now, don't compute times by hand.
 - Next: lead time per board in 02_two_stations.
+## 15-11-2026
+- Did: oven avg wait + lead time per board in 02_two_situations (51 done, avg 33.8, max 60.6).
+- Learned: boards unfinished at shift end aren't counted (censoring).
+- Next: LangGraph quickstart.
