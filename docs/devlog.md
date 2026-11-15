@@ -2,7 +2,7 @@
 
 End every session with three lines: what I did, where I stopped, the next step.
 
-## 2026-11-09
+## 09-11-2026
 - Did: project plan written, folder skeleton created.
 - Stopped at: Phase 0, nothing installed yet.
 - Decided: PCB assembly factory (ADR 0003); C++ scheduling engine (ADR 0002).
@@ -23,29 +23,9 @@ End every session with three lines: what I did, where I stopped, the next step.
 - Learned: oven queue always 0, P&P is the bottleneck; read env.now, don't compute times by hand.
 - Next: lead time per board in 02_two_stations.
 
-## 15-11-20261
+## 15-11-2026
 - Did: oven avg wait + lead time per board in 02_two_stations (51 done, avg 33.8, max 60.5).
-       compared running times with 1 P&P machine and 2 P&P machines.
-       Results : - 1 P&P machine -
-                    boards started:     53
-                    average wait:       21.1 min
-                    longest wait:       57.0 min
-                    still in queue:     4
-                    machine utilization 87%
-                    oven utilization    64%
-                    Board Count:        51
-                    avg lead time:      33.8
-                    max lead time:      60.5
-                 - 2 P&P machines -
-                    boards started:     57
-                    average wait:       2.2 min
-                    longest wait:       13.0 min
-                    still in queue:     0
-                    machine utilization 48%
-                    oven utilization    68%
-                    Board Count:        54
-                    avg lead time:      23.6 min 
-                    max lead time:      47.0 min
+- Compared: 1 P&P → avg lead 33.8 min, P&P 87%; 2 P&P → 23.6 min, P&P 48%, oven 68% (bottleneck moved to oven).
 - Learned: boards unfinished at shift end aren't counted (censoring).
 - Next: LangGraph quickstart.
 

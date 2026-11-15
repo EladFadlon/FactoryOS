@@ -1,4 +1,4 @@
-"""Session 3: two stations (P&P , oven) processing a queue of boards.
+"""Session 4: two stations (P&P , oven) processing a queue of boards.
 
 Run:  uv run --with simpy python simulation/playground/02_two_stations.py
 """
@@ -66,6 +66,7 @@ def main():
     print(f"boards started:     {len(waits)}")
     print(f"average wait:       {sum(waits) / len(waits):.1f} min")
     print(f"longest wait:       {max(waits):.1f} min")
+    print(f"avg oven wait:      {sum(oven_waits) / len(oven_waits):.1f} min")
     print(f"still in queue:     {len(pnp.queue)}")
     print(f"machine utilization {busy_minutes / (SHIFT_MINUTES * MACHINES):.0%}")
     print(f"oven utilization    {(oven_busy / SHIFT_MINUTES):.0%}")
