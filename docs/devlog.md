@@ -22,7 +22,30 @@ End every session with three lines: what I did, where I stopped, the next step.
 - Did: SimPy basics; 01_one_machine + 02_two_stations (P&P → oven), written myself.
 - Learned: oven queue always 0, P&P is the bottleneck; read env.now, don't compute times by hand.
 - Next: lead time per board in 02_two_stations.
-## 15-11-2026
-- Did: oven avg wait + lead time per board in 02_two_situations (51 done, avg 33.8, max 60.6).
+
+## 15-11-20261
+- Did: oven avg wait + lead time per board in 02_two_stations (51 done, avg 33.8, max 60.5).
+       compared running times with 1 P&P machine and 2 P&P machines.
+       Results : - 1 P&P machine -
+                    boards started:     53
+                    average wait:       21.1 min
+                    longest wait:       57.0 min
+                    still in queue:     4
+                    machine utilization 87%
+                    oven utilization    64%
+                    Board Count:        51
+                    avg lead time:      33.8
+                    max lead time:      60.5
+                 - 2 P&P machines -
+                    boards started:     57
+                    average wait:       2.2 min
+                    longest wait:       13.0 min
+                    still in queue:     0
+                    machine utilization 48%
+                    oven utilization    68%
+                    Board Count:        54
+                    avg lead time:      23.6 min 
+                    max lead time:      47.0 min
 - Learned: boards unfinished at shift end aren't counted (censoring).
 - Next: LangGraph quickstart.
+

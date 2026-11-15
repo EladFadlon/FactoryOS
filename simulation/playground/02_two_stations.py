@@ -1,17 +1,18 @@
-"""Session 3: one pick & place machine processing a queue of boards.
+"""Session 3: two stations (P&P , oven) processing a queue of boards.
 
 Run:  uv run --with simpy python simulation/playground/02_two_stations.py
 """
+
 import random
 
 import simpy
 
 SEED = 42
 PNP_MINUTES = 8           # dev_board time on pick & place (config/factory.yaml)
-OVEN_MINUTES = 6
+OVEN_MINUTES = 6          # dev_board time on oven
 MEAN_ARRIVAL_MINUTES = 10 # a new board arrives every ~10 minutes on average
 SHIFT_MINUTES = 480       # one 8-hour shift
-MACHINES = 1              # try 2 (pnp-1 + pnp-2) and compare the waits
+MACHINES = 2              
 
 waits = []
 busy_minutes = 0.0
@@ -22,7 +23,7 @@ lead_times = []
 
 def board(env, name, pnp ,oven):
     """One board: wait in line for the machine, get processed, leave."""
-    global busy_minutes, oven_busy, lead_times
+    global busy_minutes, oven_busy
     arrived = env.now
     with pnp.request() as req:           # join the queue
         yield req                        # wait until the machine is free
@@ -51,18 +52,6 @@ def arrivals(env, pnp, oven):
         i += 1
         env.process(board(env, f"board-{i:03d}", pnp , oven))
 
-def avg_leadT(lead_times ):
-    sum = 0.0
-    for x in lead_times:
-        sum += x
-    return sum / len(lead_times)
-
-def max_leadT(lead_times):
-    max = 0.0
-    for x in lead_times: 
-        if max < x:
-            max = x
-    return max
 
 
 def main():
@@ -79,10 +68,10 @@ def main():
     print(f"longest wait:       {max(waits):.1f} min")
     print(f"still in queue:     {len(pnp.queue)}")
     print(f"machine utilization {busy_minutes / (SHIFT_MINUTES * MACHINES):.0%}")
-    print(f"oven utilization {(oven_busy / SHIFT_MINUTES):.0%}")
-    print(f"Board Count: {len(lead_times)}")
-    print(f"avg lead time: {avg_leadT(lead_times):.1f}")
-    print(f"max lead time: {max_leadT(lead_times):.1f}")
+    print(f"oven utilization    {(oven_busy / SHIFT_MINUTES):.0%}")
+    print(f"Board Count:        {len(lead_times)}")
+    print(f"avg lead time:      {sum(lead_times)/len(lead_times):.1f} min ")
+    print(f"max lead time:      {max(lead_times):.1f} min")
 
 
 if __name__ == "__main__":
