@@ -29,3 +29,8 @@ End every session with three lines: what I did, where I stopped, the next step.
 - Learned: boards unfinished at shift end aren't counted (censoring).
 - Next: LangGraph quickstart.
 
+
+## 15-11-2026 (session 5)
+- Did: first LangGraph graph (03_first_graph): check_capacity → route → accept / escalate, no LLM.
+- Learned: state = TypedDict, nodes return only changed keys, conditional edge takes a list of targets.
+- Next: connect an LLM (Gemini free tier) — API keys first.
